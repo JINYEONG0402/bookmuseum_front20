@@ -1,15 +1,25 @@
 /* 전체 화면 중앙 정렬 */
 .login-container {
+<<<<<<< HEAD
   width: 100%;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   background: #ffffff;
+=======
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ffffff;
+>>>>>>> 363353d833bbd03871f625b802584a0f813e1606
 }
 
 /* 로그인 박스 */
 .login-box {
+<<<<<<< HEAD
   width: 380px;
   height: 320px;
   padding: 40px;
@@ -17,17 +27,33 @@
   border-radius: 8px;
   border: 1px solid #e5e5e5;
   box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+=======
+    width: 380px;
+    height: 320px;
+    padding: 40px;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e5e5e5;
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+>>>>>>> 363353d833bbd03871f625b802584a0f813e1606
 }
 
 /* 아이디/비번 글씨 */
 .login-title {
+<<<<<<< HEAD
   font-size: 14px;
   margin-bottom: 6px;
   font-weight: 600;
+=======
+    font-size: 14px;
+    margin-bottom: 6px;
+    font-weight: 600;
+>>>>>>> 363353d833bbd03871f625b802584a0f813e1606
 }
 
 /* input 스타일 */
 .login-input {
+<<<<<<< HEAD
   width: 93%;
   height: 38px;
   margin-bottom: 18px;
@@ -40,10 +66,25 @@
 
 .login-input::placeholder {
   color: #bdbdbd;
+=======
+    width: 93%;
+    height: 38px;
+    margin-bottom: 18px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #D9D9D9;
+    font-size: 14px;
+    outline: none;
+}
+
+.login-input::placeholder {
+    color: #bdbdbd;
+>>>>>>> 363353d833bbd03871f625b802584a0f813e1606
 }
 
 /* 로그인 버튼 */
 .login-button {
+<<<<<<< HEAD
   width: 100%;
   height: 38px;
   background: #000000;
@@ -53,10 +94,22 @@
   margin-top: 5px;
   cursor: pointer;
   font-size: 14px;
+=======
+    width: 100%;
+    height: 38px;
+    background: #000000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-top: 5px;
+    cursor: pointer;
+    font-size: 14px;
+>>>>>>> 363353d833bbd03871f625b802584a0f813e1606
 }
 
 /* 회원가입 링크 */
 .join-link {
+<<<<<<< HEAD
   display: block;
   margin-top: 15px;
   font-size: 13px;
@@ -88,3 +141,36 @@
 .password-icon:hover {
   opacity: 1;
 }
+=======
+    display: block;
+    margin-top: 15px;
+    font-size: 13px;
+    text-align: center;
+    color: #333;
+    text-decoration: none;
+}
+
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-input {
+    padding-right: 10px;
+}
+
+.password-icon {
+    position: absolute;
+    right:20px;
+    top: 30px;
+    transform: translateY(-50%);
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    opacity: 1;
+}
+
+.password-icon:hover {
+    opacity: 1;
+}
+>>>>>>> 363353d833bbd03871f625b802584a0f813e1606
