@@ -9,6 +9,7 @@ import BookUpdatePage from "./pages/update/BookUpdatePage.jsx";
 import Home from "./pages/home";
 import Login from "./pages/login";
 import Join from "./pages/join";
+import Detail from "./pages/detail";
 
 
 function App() {
@@ -18,6 +19,10 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/join" element={<Join />} />
+        <Route path="/detail" element={<Detail />} />
+         <Route path="/register" element={<BookCreatePage />} />
+        <Route path="/ai-image" element={<AiImagePage />} />
+        <Route path="/update" element={<BookUpdatePage />} />
       </Routes>
     </BrowserRouter>
   );
