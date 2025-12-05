@@ -1,6 +1,7 @@
 // src/pages/edit/BookEditPage.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
+import noneImg from "../../asserts/noneimg.png";
 
 function BookEditPage() {
     const navigate = useNavigate();
@@ -21,14 +22,14 @@ function BookEditPage() {
     const [coverImage, setCoverImage] = useState("");
     const [coverImageId, setCoverImageId] = useState(null);
 
-    // ⭐ 수정 버튼 활성화 조건
+    // 수정 버튼 활성화 조건
     const isFormValid =
         title.trim() &&
         author.trim() &&
         description.trim() &&
         coverImage;
 
-    // ⭐ 책 정보 불러오기 (나중에 백엔드 붙이면 fetch로 교체)
+    // 책 정보 불러오기 (나중에 백엔드 붙이면 fetch로 교체)
     useEffect(() => {
         // 지금은 더미로 테스트
         // 나중엔 bookId로 GET /books/{id} 요청
@@ -37,8 +38,7 @@ function BookEditPage() {
             title: "고양이와 함께한 순간",
             author: "이수린",
             description: "책 내용!",
-            coverImage:
-                "https://cdn.pixabay.com/photo/2017/02/20/18/03/cat-2083492_1280.png",
+            coverImage: noneImg,
             coverImageId: 1001,
         };
 
@@ -72,7 +72,7 @@ function BookEditPage() {
         });
     };
 
-    // ⭐ 수정하기 요청
+    // 수정하기 요청
     const handleEdit = (e) => {
         e.preventDefault();
 
@@ -101,17 +101,18 @@ function BookEditPage() {
     if (!book) return <div>로딩 중...</div>;
 
     return (
-        <div style={{ padding: "40px" }}>
+        <div style={{ padding: "40px",maxWidth: "960px",   //  가운데 폭 제한
+            margin: "0 auto", }}>
             <h2 style={{ marginBottom: "16px" }}>도서 수정</h2>
 
             <form onSubmit={handleEdit}>
-                <div style={{ display: "flex", gap: "40px" }}>
+                <div style={{ display: "flex", gap: "40px",  }}>
                     {/* LEFT: 이미지 */}
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                         <div
                             style={{
                                 width: "320px",
-                                height: "420px",
+                                height: "400px",
                                 border: "1px solid #eee",
                                 borderRadius: "6px",
                                 overflow: "hidden",

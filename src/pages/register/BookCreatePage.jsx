@@ -6,7 +6,7 @@ function BookCreatePage() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // 🔹 AI 페이지에서 돌아올 때 넘겨준 값들을 초기값으로 사용
+    //  AI 페이지에서 돌아올 때 넘겨준 값들을 초기값으로 사용
     const initialTitle = location.state?.title || "";
     const initialAuthor = location.state?.author || "";
     const initialDescription = location.state?.description || "";
@@ -30,7 +30,7 @@ function BookCreatePage() {
         !!coverImage; // 이미지 필수
 
     const goToAiImagePage = () => {
-        // 🔸 제목 / 저자 / 내용이 모두 있어야 이동
+        //  제목 / 저자 / 내용이 모두 있어야 이동
         if (!title.trim() || !author.trim() || !description.trim()) {
             alert("제목, 저자, 책 내용을 먼저 모두 입력해줘!");
             return;
@@ -67,25 +67,38 @@ function BookCreatePage() {
             // bookId는 실제 DB등록 시엔 백엔드에서 생성
         };
 
-        // 🔥 나중에 여기에 실제 백엔드로 POST
+        // 나중에 여기에 실제 백엔드로 POST
         console.log("도서 등록 데이터:", payload);
         alert("도서 등록이 완료되었습니다! (지금은 콘솔에만 찍힘)");
     };
 
     return (
-        <div style={{ padding: "40px" }}>
+        <div  style={{
+            padding: "40px 24px",
+            maxWidth: "960px",   // 가운데 폭 제한
+            margin: "0 auto",    // 화면 중앙 정렬
+        }}>
             <h2>도서 등록</h2>
 
             <form onSubmit={handleSubmit}>
                 <div style={{ display: "flex", gap: "40px", marginTop: "24px" }}>
+
                     {/* 왼쪽: 이미지 영역 */}
-                    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "8px",
+                            width: "320px"
+                        }}
+                    >
+
                         {/* 이미지 박스 */}
                         <div
                             onClick={goToAiImagePage}
                             style={{
-                                width: "260px",
-                                height: "320px",
+                                width: "320px",
+                                height: "400px",
                                 border: "1px dashed #ccc",
                                 display: "flex",
                                 alignItems: "center",
@@ -94,7 +107,7 @@ function BookCreatePage() {
                                 color: "#ccc",
                                 cursor: "pointer",
                                 overflow: "hidden",
-                                borderRadius: "6px",
+                                borderRadius: "8px",
                                 backgroundColor: "#fafafa",
                             }}
                         >
@@ -116,30 +129,20 @@ function BookCreatePage() {
                         {/* 이미지 설명 + 수정 버튼 */}
                         {coverImage ? (
                             <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                                <span
-                                    style={{
-                                        fontSize: "12px",
-                                        color: "#555",
-                                    }}
-                                >
-                                    표지 이미지가 선택되었습니다.
-                                </span>
+                <span style={{ fontSize: "12px", color: "#555" }}>
+                    표지 이미지가 선택되었습니다.
+                </span>
                                 {coverImageId && (
-                                    <span
-                                        style={{
-                                            fontSize: "11px",
-                                            color: "#999",
-                                        }}
-                                    >
-                                        이미지 ID: {coverImageId}
-                                    </span>
+                                    <span style={{ fontSize: "11px", color: "#999" }}>
+                        이미지 ID: {coverImageId}
+                    </span>
                                 )}
                                 <button
                                     type="button"
                                     onClick={goToAiImagePage}
                                     style={{
                                         marginTop: "4px",
-                                        width: "260px",
+                                        width: "320px",
                                         height: "32px",
                                         backgroundColor: "#fff",
                                         color: "#222",
@@ -154,13 +157,14 @@ function BookCreatePage() {
                             </div>
                         ) : (
                             <span style={{ fontSize: "12px", color: "#777" }}>
-                                클릭해서 AI로 표지 이미지를 생성하세요.
-                            </span>
+                클릭해서 AI로 표지 이미지를 생성하세요.
+            </span>
                         )}
                     </div>
 
                     {/* 오른쪽: 입력 폼 */}
-                    <div style={{ flex: 1 }}>
+                    <div style={{ flex: 1, maxWidth: "480px" }}>
+
                         {/* 제목 */}
                         <div style={{ marginBottom: "16px" }}>
                             <label
