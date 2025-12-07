@@ -31,6 +31,7 @@ function App() {
         <Route path="/register" element={<BookCreatePage />} />
         <Route path="/ai-image" element={<AiImagePage />} />
         <Route path="/update" element={<BookUpdatePage />} />
+        <Route path="/mypage" element={<MyPage />} />
       </Routes>
  
     </BrowserRouter>
