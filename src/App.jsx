@@ -20,7 +20,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/join" element={<Join />} />
         <Route path="/detail" element={<Detail />} />
-         <Route path="/register" element={<BookCreatePage />} />
+        <Route path="/register" element={<BookCreatePage />} />
         <Route path="/ai-image" element={<AiImagePage />} />
         <Route path="/update" element={<BookUpdatePage />} />
       </Routes>
