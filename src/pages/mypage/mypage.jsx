@@ -12,7 +12,7 @@ export default function MyPage() {
     { id: 4, title: "책 제목", image: null },
   ]);
 
-  // 좋아요 데이터
+  // 좋아요 도서
   const [likedBooks, setLikedBooks] = useState([
     { id: 1, title: "책 제목", liked: true },
     { id: 2, title: "책 제목", liked: true },
@@ -25,17 +25,19 @@ export default function MyPage() {
     navigate(`/update/${id}`);
   };
 
-  // ⭐ 삭제 버튼 → 리스트에서 제거 (추후 백엔드 연결)
+  // ⭐ 삭제 버튼
   const handleDelete = (id) => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
       setMyBooks((prev) => prev.filter((book) => book.id !== id));
     }
   };
 
-  // 좋아요 토글
+  // ❤️ 좋아요 토글 기능
   const toggleLike = (id) => {
     setLikedBooks((prev) =>
-      prev.map((b) => (b.id === id ? { ...b, liked: !b.liked } : b))
+      prev.map((b) =>
+        b.id === id ? { ...b, liked: !b.liked } : b
+      )
     );
   };
 
@@ -55,10 +57,16 @@ export default function MyPage() {
                 <p style={styles.bookTitle}>{book.title}</p>
 
                 <div style={styles.actionRow}>
-                  <button style={styles.editBtn} onClick={() => handleEdit(book.id)}>
+                  <button
+                    style={styles.editBtn}
+                    onClick={() => handleEdit(book.id)}
+                  >
                     수정
                   </button>
-                  <button style={styles.deleteBtn} onClick={() => handleDelete(book.id)}>
+                  <button
+                    style={styles.deleteBtn}
+                    onClick={() => handleDelete(book.id)}
+                  >
                     삭제
                   </button>
                 </div>
@@ -68,7 +76,7 @@ export default function MyPage() {
         </div>
       </section>
 
-      {/* 좋아요 도서 */}
+      {/* 좋아요 누른 도서 */}
       <section style={styles.section}>
         <h3 style={styles.subTitle}>좋아요 누른 도서</h3>
         <div style={styles.bookGrid}>
@@ -79,11 +87,16 @@ export default function MyPage() {
               <div style={styles.rowBetween}>
                 <p style={styles.bookTitle}>{book.title}</p>
 
+                {/* ❤️ 하트 이미지 토글 */}
                 <div
-                  style={styles.likeIcon}
+                  style={styles.likeIconBox}
                   onClick={() => toggleLike(book.id)}
                 >
-                  {book.liked ? "🤍" : "🖤"}
+                  <img
+                    src={book.liked ? "/heart-line.png" : "/heart-fill.png"}
+                    alt="heart"
+                    style={styles.likeIcon}
+                  />
                 </div>
               </div>
             </div>
@@ -97,24 +110,23 @@ export default function MyPage() {
 const styles = {
   container: {
     width: "1400px",
-    margin: "0 auto",     // ⭐ 중앙 정렬
-    paddingTop: "50px",
+    margin: "80px 270px ",     // ⭐ 중앙 정렬
   },
   title: {
     fontSize: "30px",
     fontWeight: "bold",
-    marginBottom: "40px",
+    marginBottom: "100px",
   },
   subTitle: {
     fontSize: "18px",
-    marginBottom: "16px",
+    marginBottom: "70px",
   },
   section: {
-    marginBottom: "60px",
+    marginBottom: "150px",
   },
   bookGrid: {
     display: "flex",
-    justifyContent: "center",
+
     gap: "24px",
     flexWrap: "wrap",
   },
@@ -160,4 +172,15 @@ const styles = {
     fontSize: "20px",
     cursor: "pointer",
   },
+  likeIconBox: {
+  cursor: "pointer",
+  display: "flex",
+  alignItems: "center",
+  },
+  likeIcon: {
+  width: "22px",
+  height: "22px",
+  userSelect: "none",
+  },
+
 };
