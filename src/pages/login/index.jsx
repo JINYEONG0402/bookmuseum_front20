@@ -42,6 +42,7 @@ function Login({ setIsLoggedIn }) {
 
             localStorage.setItem("currentUser", JSON.stringify(loginUser));
             setIsLoggedIn(true);
+            alert("로그인이 완료되었습니다!");
 
             navigate("/");
         } catch (err) {
