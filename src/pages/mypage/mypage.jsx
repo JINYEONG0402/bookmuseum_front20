@@ -28,7 +28,20 @@ export default function MyPage({ bookList, setBookList }) {
             )
         );
     };
-
+    // ⭐ 좋아요한 도서 상세 이동
+    const handleGoLikedDetail = (book) => {
+        navigate("/detail", {
+            state: {
+                book: {
+                    id: book.id,
+                    title: book.title,
+                    author: "",
+                    description: "",
+                    image: "",
+                },
+            },
+        });
+    };
     // ⭐ 도서 등록 페이지로 이동
     const goToRegister = () => {
         navigate("/register");
@@ -94,7 +107,7 @@ export default function MyPage({ bookList, setBookList }) {
                     )}
 
                     {myBooks.map((book) => (
-                        <div key={book.id} style={styles.card}>
+                        <div key={book.id} style={styles.card} onClick={() => handleGoDetail(book.id)}>
                             <div
                                 style={{ ...styles.imageBox, cursor: "pointer" }}
                                 onClick={() => handleGoDetail(book.id)}
@@ -117,15 +130,21 @@ export default function MyPage({ bookList, setBookList }) {
                                 <p style={styles.bookTitle}>{book.title}</p>
 
                                 <div style={styles.actionRow}>
-                                    <button
+                                      <button
                                         style={styles.editBtn}
-                                        onClick={() => handleEdit(book.id)}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleEdit(book.id);
+                                        }}
                                     >
                                         수정
                                     </button>
                                     <button
                                         style={styles.deleteBtn}
-                                        onClick={() => handleDelete(book.id)}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDelete(book.id);
+                                        }}
                                     >
                                         삭제
                                     </button>
@@ -136,20 +155,29 @@ export default function MyPage({ bookList, setBookList }) {
                 </div>
             </section>
 
-            {/* 좋아요 누른 도서 (원래 코드 그대로)*/}
+            {/* 좋아요 누른 도서 */}            
             <section style={styles.section}>
                 <h3 style={styles.subTitle}>좋아요 누른 도서</h3>
                 <div style={styles.bookGrid}>
                     {likedBooks.map((book) => (
-                        <div key={book.id} style={styles.card}>
+                        <div 
+                            key={book.id} 
+                            style={styles.card}
+                            onClick={() => handleGoLikedDetail(book.id)}   // ⭐ 카드 클릭 → 상세 이동
+                        >
+
                             <div style={styles.imageBox}></div>
 
                             <div style={styles.rowBetween}>
                                 <p style={styles.bookTitle}>{book.title}</p>
 
+                                {/* ❤️ 하트 클릭 시 상세 이동 막기 */}
                                 <div
                                     style={styles.likeIconBox}
-                                    onClick={() => toggleLike(book.id)}
+                                    onClick={(e) => {
+                                        e.stopPropagation();    // ⭐ 상세 이동 막기
+                                        toggleLike(book.id);
+                                    }}
                                 >
                                     <img
                                         src={
@@ -208,11 +236,12 @@ const styles = {
         flexWrap: "wrap",
     },
     card: {
-        width: "250px",
+        width: "180px",
         border: "1px solid ",
         borderRadius: "8px",
         padding: "16px",
         background: "#fff",
+        marginLeft:"50px"
     },
     imageBox: {
         width: "100%",
@@ -246,8 +275,10 @@ const styles = {
         cursor: "pointer",
     },
     likeIcon: {
-        fontSize: "20px",
+        width: "24px",    // 고정!
+        height: "24px",   // 고정!
         cursor: "pointer",
+        objectFit: "contain",
     },
     likeIconBox: {
         cursor: "pointer",
