@@ -1,5 +1,5 @@
 // src/pages/update/BookUpdatePage.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import noneImg from "../../asserts/noneimg.png";
 import {
@@ -41,7 +41,7 @@ function BookUpdatePage({ bookList, setBookList }) {
     );
     const [author, setAuthor] = useState(fromState.author || "이수린");
     const [description, setDescription] = useState(
-        fromState.description || "책 내용!"
+        fromState.description ?? fromState.content ?? "책 내용!"
     );
     const [coverImage, setCoverImage] = useState(
         fromState.coverImage || noneImg
@@ -51,7 +51,41 @@ function BookUpdatePage({ bookList, setBookList }) {
     );
 
     // 등록일은 그대로 유지
-    const [regTime] = useState(fromState.reg_time || null);
+    const [regTime, setRegTime] = useState(fromState.reg_time || null);
+
+    // ⭐ 수정페이지 들어올 때, 서버에서 진짜 상세정보 다시 가져오기
+    useEffect(() => {
+        if (!id) return;
+
+        // 이미 MyPage에서 내용까지 넘겨줬다면 굳이 다시 안 불러도 됨
+        if (fromState.description || fromState.content) return;
+
+        (async () => {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/books/${id}`, {
+                    method: "GET",
+                    credentials: "include",
+                });
+
+                if (!res.ok) {
+                    console.warn("도서 상세 조회 실패:", res.status);
+                    return;
+                }
+
+                const data = await res.json();
+
+                // 백엔드에서 내려주는 필드에 맞게 넣기
+                setTitle(data.title);
+                setAuthor(data.author);
+                setDescription(data.content || ""); // 🔥 여기서 진짜 내용 세팅
+                setCoverImage(data.imgUrl || noneImg);
+                setCoverImageId(data.imageId);
+                setRegTime(data.regTime || regTime);
+            } catch (err) {
+                console.error("도서 상세 조회 에러:", err);
+            }
+        })();
+    }, [id]); // id 바뀌면 다시 조회
 
     const isFormValid =
         title.trim() && author.trim() && description.trim() && coverImage;
@@ -82,13 +116,11 @@ function BookUpdatePage({ bookList, setBookList }) {
         }
 
         // ✅ 백엔드 Book 엔티티에 맞는 payload (PUT /api/books/{bookId})
-        // Book: title, author, content, imgUrl (추정)
         const apiPayload = {
             title: title.trim(),
             author: author.trim(),
             content: description.trim(),
             imgUrl: coverImage,
-            // updateDate 같은 필드가 엔티티에 있으면 여기에 맞춰 추가
         };
 
         let apiSuccess = false;
@@ -115,7 +147,6 @@ function BookUpdatePage({ bookList, setBookList }) {
         } catch (err) {
             console.warn("도서 수정 API 호출 실패(서버 미구동/연결 문제):", err);
         }
-
 
         // 📦 프론트에서 쓰는 전체 책 정보 (UI 상태용)
         const updatedBook = {
