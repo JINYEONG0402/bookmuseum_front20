@@ -9,17 +9,11 @@ export default function Header({ isLoggedIn, setIsLoggedIn }) {
 
     const handleLogout = async () => {
         try {
-            // ⭐ 서버에 로그아웃 요청 (쿠키 삭제)
-            await axios.post(
-                `${API_BASE}/api/logout`,
-                {},
-                { withCredentials: true }  // JWT 쿠키 전송
-            );
+            await axios.get(`${API_BASE}/api/member/logout`, {
+                withCredentials: true   // JWT 쿠키 전달
+            });
 
-            // ⭐ 로컬스토리지도 삭제
             localStorage.removeItem("currentUser");
-
-            // 로그인 상태 변경
             setIsLoggedIn(false);
 
             navigate("/login");
