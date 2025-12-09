@@ -8,7 +8,7 @@ export default function MyPage() {
 
     // 🔹 현재 로그인한 사용자 정보 (PK 포함)
     const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
-    const memberId = currentUser.loginId   // ⭐ 반드시 PK 사용
+    const memberId = currentUser.loginId; // ⭐ 반드시 PK 사용
 
     // 🔹 백엔드에서 가져온 데이터
     const [myBooks, setMyBooks] = useState([]);
@@ -20,8 +20,6 @@ export default function MyPage() {
     // =====================================================
     // 📌 내가 등록한 도서 조회 API
     // =====================================================
-
-
     const loadMyBooks = async () => {
         try {
             const res = await axios.get(`${API_BASE}/api/mypage`, {
@@ -29,26 +27,17 @@ export default function MyPage() {
                 withCredentials: true,
             });
 
-            // 🔥 백엔드 snake_case → 프론트 camelCase 변환
-            const converted = res.data.map((b) => ({
-                bookId: b.book_id,
-                title: b.title,
-                author: b.author,
-                content: b.content,
-                imgUrl: b.img_url,
-                liked: b.liked,
-                viewCnt: b.view_cnt,
-            }));
+            console.log("📌 [내 도서 응답]", res.data);
 
-            setMyBooks(converted);
+            setMyBooks(res.data);
         } catch (err) {
             console.error("내 도서 조회 오류:", err);
         }
     };
+
     // =====================================================
     // 📌 좋아요한 도서 조회 API
     // =====================================================
-
     const loadLikedBooks = async () => {
         try {
             const res = await axios.get(`${API_BASE}/api/mypage/liked`, {
@@ -56,17 +45,7 @@ export default function MyPage() {
                 withCredentials: true,
             });
 
-            const converted = res.data.map((b) => ({
-                bookId: b.book_id,
-                title: b.title,
-                author: b.author,
-                content: b.content,
-                imgUrl: b.img_url,
-                liked: b.liked,
-                viewCnt: b.view_cnt,
-            }));
-
-            setLikedBooks(converted);
+            setLikedBooks(res.data);
         } catch (err) {
             console.error("좋아요 도서 조회 오류:", err);
         }
@@ -109,22 +88,24 @@ export default function MyPage() {
     // =====================================================
     const goToRegister = () => navigate("/register");
 
+
     const handleGoDetail = (book) => {
         navigate("/detail", {
             state: {
                 book: {
-                    id: book.book_id,
+                    id: book.bookId,
                     title: book.title,
                     author: book.author,
-                    description: book.content,
-                    image: book.img_url,
+                    content: book.content,
+                    imgUrl: book.imgUrl,
                 },
             },
         });
     };
 
-    const handleEdit = (bookId) => {
-        navigate("/update", { state: { bookId } });
+
+    const handleEdit = (book) => {
+        navigate("/update", { state: book });
     };
 
     // =====================================================
@@ -134,7 +115,7 @@ export default function MyPage() {
         try {
             const res = await axios.patch(
                 `${API_BASE}/api/books/${bookId}`,
-                { member: { id: memberId } },  // ⭐ PK 사용
+                { member: { id: memberId } }, // ⭐ PK 사용
                 { withCredentials: true }
             );
 
@@ -170,6 +151,7 @@ export default function MyPage() {
             {/* 내가 등록한 도서 */}
             <section style={styles.section}>
                 <h3 style={styles.subTitle}>등록한 도서</h3>
+
                 <div style={styles.bookGrid}>
                     {myBooks.length === 0 && (
                         <p style={{ color: "#888" }}>등록한 도서가 없습니다.</p>
@@ -177,7 +159,7 @@ export default function MyPage() {
 
                     {myBooks.map((book) => (
                         <div
-                            key={book.bookId}
+                            key={book.book_id}
                             style={styles.card}
                             onClick={() => handleGoDetail(book)}
                         >
@@ -204,7 +186,7 @@ export default function MyPage() {
                                         style={styles.editBtn}
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            handleEdit(book.bookId);
+                                            handleEdit(book);
                                         }}
                                     >
                                         수정
@@ -214,7 +196,7 @@ export default function MyPage() {
                                         style={styles.deleteBtn}
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            handleDelete(book.bookId);
+                                            handleDelete(book.book_id);
                                         }}
                                     >
                                         삭제
@@ -233,7 +215,7 @@ export default function MyPage() {
                 <div style={styles.bookGrid}>
                     {likedBooks.map((book) => (
                         <div
-                            key={book.bookId}
+                            key={book.book_id}
                             style={styles.card}
                             onClick={() => handleGoDetail(book)}
                         >
@@ -251,6 +233,7 @@ export default function MyPage() {
                                     />
                                 )}
                             </div>
+
                             <div style={styles.rowBetween}>
                                 <p style={styles.bookTitle}>{book.title}</p>
 
@@ -281,7 +264,7 @@ export default function MyPage() {
 }
 
 // -------------------------
-// 스타일 (그대로 유지)
+// 스타일
 // -------------------------
 const styles = {
     container: {
