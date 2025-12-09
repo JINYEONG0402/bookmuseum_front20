@@ -1,13 +1,32 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Header({ isLoggedIn, setIsLoggedIn }) {
     const navigate = useNavigate();
 
-    const handleLogout = () => {
-        localStorage.removeItem("currentUser"); //로컬 스토리지 연동
-        setIsLoggedIn(false);
-        navigate("/login");
+    const API_BASE = "http://localhost:8080";
+
+    const handleLogout = async () => {
+        try {
+            // ⭐ 서버에 로그아웃 요청 (쿠키 삭제)
+            await axios.post(
+                `${API_BASE}/api/logout`,
+                {},
+                { withCredentials: true }  // JWT 쿠키 전송
+            );
+
+            // ⭐ 로컬스토리지도 삭제
+            localStorage.removeItem("currentUser");
+
+            // 로그인 상태 변경
+            setIsLoggedIn(false);
+
+            navigate("/login");
+        } catch (err) {
+            console.error("로그아웃 실패:", err);
+            alert("로그아웃 실패");
+        }
     };
 
     return (
