@@ -13,6 +13,7 @@ function Detail() {
 
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     const currentLoginId = currentUser?.loginId;
+    const isLoggedIn = !!currentLoginId; // ⭐ 로그인 여부
 
     const [book, setBook] = useState(bookFromHome || null);
     const [comments, setComments] = useState([]);
@@ -28,7 +29,7 @@ function Detail() {
         try {
             const res = await fetch(`/api/books/${bookId}`, {
                 method: "GET",
-                credentials: "include" // ⭐ 인증 필요
+                credentials: "include"
             });
 
             if (!res.ok) return;
@@ -49,28 +50,27 @@ function Detail() {
         }
     };
 
-    // 📌 댓글 조회 + 로그인ID 매핑 ⭐⭐⭐
+    // 📌 댓글 조회 (로그인 상태에서만)
     const fetchComments = async () => {
+        if (!isLoggedIn) return; // ⭐ 비로그인 시 아예 호출 안 함
+
         try {
             const res = await fetch(`/api/books/${bookId}/comments`, {
                 method: "GET",
-                credentials: "include" // ⭐ 인증 필요
+                credentials: "include"
             });
 
             if (!res.ok) return;
 
             const data = await res.json();
 
-            // 댓글 리스트 변환
             const converted = await Promise.all(
                 data.map(async (c) => {
-                    // 댓글 JSON 구조: c.member.id 존재
                     if (!c.member || !c.member.id) return c;
 
-                    // memberId 로 로그인ID 조회
                     const memberRes = await fetch(`/api/member/${c.member.id}`, {
                         method: "GET",
-                        credentials: "include" // ⭐ 인증 필요
+                        credentials: "include"
                     });
 
                     if (!memberRes.ok) return c;
@@ -79,7 +79,7 @@ function Detail() {
 
                     return {
                         ...c,
-                        commentLoginId: memberData.loginId, // ⭐ 비교용 loginID
+                        commentLoginId: memberData.loginId,
                     };
                 })
             );
@@ -94,23 +94,18 @@ function Detail() {
     useEffect(() => {
         fetchBookDetail();
         fetchComments();
-    }, [bookId]);
+    }, [bookId, isLoggedIn]);
 
     // 📌 댓글 작성
     const handleAddComment = async () => {
         if (!newComment.trim()) return;
 
-        const payload = {
-            content: newComment,
-            author: currentLoginId,
-        };
-
         try {
             await fetch(`/api/books/${bookId}/comments`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
-                credentials: "include" // ⭐ 인증 필요
+                body: JSON.stringify({ content: newComment }),
+                credentials: "include"
             });
 
             setNewComment("");
@@ -182,56 +177,54 @@ function Detail() {
                 </div>
             </div>
 
-            {/* 댓글 영역 */}
-            <div className="comment-section">
-                <h3 className="comment-title">댓글</h3>
+            {/* ⭐⭐⭐ 로그인한 경우에만 댓글 영역 표시 */}
+            {isLoggedIn && (
+                <div className="comment-section">
+                    <h3 className="comment-title">댓글</h3>
 
-                <div className="comment-list">
-                    {comments.map((c) => (
-                        <div className="comment-item" key={c.commentId}>
+                    <div className="comment-list">
+                        {comments.map((c) => (
+                            <div className="comment-item" key={c.commentId}>
+                                <span className="comment-user">{c.author}</span>
+                                <span className="comment-text">{c.content}</span>
 
-                            {/* 화면에 표시되는 작성자 이름 */}
-                            <span className="comment-user">{c.author}</span>
+                                {currentLoginId === c.commentLoginId && (
+                                    <div className="comment-actions">
+                                        <button
+                                            className="comment-edit-btn"
+                                            onClick={() => startEdit(c.commentId, c.content)}
+                                        >
+                                            <img src="/edit.png" className="comment-edit-icon" />
+                                        </button>
 
-                            <span className="comment-text">{c.content}</span>
+                                        <button
+                                            className="comment-delete-btn"
+                                            onClick={() => handleDeleteComment(c.commentId)}
+                                        >
+                                            <img src="/delete.png" className="comment-delete-icon" />
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
 
-                            {/* ⭐ 비교는 loginId로 진행 */}
-                            {currentLoginId === c.commentLoginId && (
-                                <div className="comment-actions">
-                                    <button
-                                        className="comment-edit-btn"
-                                        onClick={() => startEdit(c.commentId, c.content)}
-                                    >
-                                        <img src="/edit.png" className="comment-edit-icon" />
-                                    </button>
-
-                                    <button
-                                        className="comment-delete-btn"
-                                        onClick={() => handleDeleteComment(c.commentId)}
-                                    >
-                                        <img src="/delete.png" className="comment-delete-icon" />
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    ))}
+                    <div className="comment-input-wrapper">
+                        <input
+                            className="comment-input"
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                            placeholder="댓글을 입력해주세요."
+                        />
+                        <button
+                            className="comment-button"
+                            onClick={editCommentId ? handleEditComment : handleAddComment}
+                        >
+                            {editCommentId ? "수정" : "작성"}
+                        </button>
+                    </div>
                 </div>
-
-                <div className="comment-input-wrapper">
-                    <input
-                        className="comment-input"
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                        placeholder="댓글을 입력해주세요."
-                    />
-                    <button
-                        className="comment-button"
-                        onClick={editCommentId ? handleEditComment : handleAddComment}
-                    >
-                        {editCommentId ? "수정" : "작성"}
-                    </button>
-                </div>
-            </div>
+            )}
         </div>
     );
 }
