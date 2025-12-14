@@ -14,8 +14,9 @@
 /* 상세 정보 박스 */
 .detail-box {
   display: flex;
+  align-items: flex-start; /* ⭐ 중요 */
   gap: 40px;
-  width: 80%;
+  width: 100%;
   max-width: 1100px;
   padding: 30px;
   background: white;
@@ -26,17 +27,14 @@
 
 /* 이미지 박스 */
 .detail-image-wrapper {
-  width: 400px;
-  height: 450px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  margin-left: 30px;
+  width: 280px;
+  flex-shrink: 0; /* ⭐ 이미지 크기 고정 */
 }
 
 .detail-image {
-  height: 100%;
+  width: 100%;
+  height: auto; /* ⭐ 이미지 비율 유지 */
+  border-radius: 6px;
 }
 
 .book-title {
@@ -46,12 +44,21 @@
 .detail-content {
   flex: 1;
   white-space: pre-wrap;
-  margin-left: 90px;
 
+  min-width: 0;              /* ⭐ 핵심 */
+  word-break: break-word; 
 }
+
 .book-description {
   font-size: 15px;
+  line-height: 1.7;
+
+  white-space: pre-wrap;      /* ⭐ pre 기본 속성 덮어쓰기 */
+  word-break: break-word;     /* ⭐ 긴 문장 강제 줄바꿈 */
+  overflow-wrap: break-word;  /* ⭐ 박스 초과 방지 */
+  max-width: 100%;            /* ⭐ 박스 안에 가둠 */
 }
+
 
 
 .book-date-wrapper {

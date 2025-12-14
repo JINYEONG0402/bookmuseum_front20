@@ -222,7 +222,7 @@ function Detail() {
                         className="comment-input"
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
-                        placeholder="댓글 입력..."
+                        placeholder="댓글을 입력해주세요."
                     />
                     <button
                         className="comment-button"
