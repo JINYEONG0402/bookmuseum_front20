@@ -50,10 +50,8 @@ function Detail() {
         }
     };
 
-    // 📌 댓글 조회 (로그인 상태에서만)
+    // 📌 댓글 조회 (로그인 여부와 무관)
     const fetchComments = async () => {
-        if (!isLoggedIn) return; // ⭐ 비로그인 시 아예 호출 안 함
-
         try {
             const res = await fetch(`/api/books/${bookId}/comments`, {
                 method: "GET",
@@ -64,9 +62,10 @@ function Detail() {
 
             const data = await res.json();
 
+            // 로그인 상태일 때만 commentLoginId 매핑
             const converted = await Promise.all(
                 data.map(async (c) => {
-                    if (!c.member || !c.member.id) return c;
+                    if (!isLoggedIn || !c.member || !c.member.id) return c;
 
                     const memberRes = await fetch(`/api/member/${c.member.id}`, {
                         method: "GET",
@@ -177,38 +176,40 @@ function Detail() {
                 </div>
             </div>
 
-            {/* ⭐⭐⭐ 로그인한 경우에만 댓글 영역 표시 */}
-            {isLoggedIn && (
-                <div className="comment-section">
-                    <h3 className="comment-title">댓글</h3>
+            {/* 댓글 영역 (항상 표시) */}
+            <div className="comment-section">
+                <h3 className="comment-title">댓글</h3>
 
-                    <div className="comment-list">
-                        {comments.map((c) => (
-                            <div className="comment-item" key={c.commentId}>
-                                <span className="comment-user">{c.author}</span>
-                                <span className="comment-text">{c.content}</span>
+                <div className="comment-list">
+                    {comments.map((c) => (
+                        <div className="comment-item" key={c.commentId}>
+                            <span className="comment-user">{c.author}</span>
+                            <span className="comment-text">{c.content}</span>
 
-                                {currentLoginId === c.commentLoginId && (
-                                    <div className="comment-actions">
-                                        <button
-                                            className="comment-edit-btn"
-                                            onClick={() => startEdit(c.commentId, c.content)}
-                                        >
-                                            <img src="/edit.png" className="comment-edit-icon" />
-                                        </button>
+                            {/* ⭐ 로그인 + 본인 댓글일 때만 수정/삭제 */}
+                            {isLoggedIn && currentLoginId === c.commentLoginId && (
+                                <div className="comment-actions">
+                                    <button
+                                        className="comment-edit-btn"
+                                        onClick={() => startEdit(c.commentId, c.content)}
+                                    >
+                                        <img src="/edit.png" className="comment-edit-icon" />
+                                    </button>
 
-                                        <button
-                                            className="comment-delete-btn"
-                                            onClick={() => handleDeleteComment(c.commentId)}
-                                        >
-                                            <img src="/delete.png" className="comment-delete-icon" />
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
+                                    <button
+                                        className="comment-delete-btn"
+                                        onClick={() => handleDeleteComment(c.commentId)}
+                                    >
+                                        <img src="/delete.png" className="comment-delete-icon" />
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
 
+                {/* ⭐ 로그인한 경우에만 댓글 작성 영역 표시 */}
+                {isLoggedIn && (
                     <div className="comment-input-wrapper">
                         <input
                             className="comment-input"
@@ -223,8 +224,8 @@ function Detail() {
                             {editCommentId ? "수정" : "작성"}
                         </button>
                     </div>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 }
