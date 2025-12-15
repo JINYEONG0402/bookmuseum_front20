@@ -126,26 +126,23 @@ export default function MyPage() {
         try {
             const res = await axios.patch(
                 `${API_BASE}/api/books/${bookId}`,
-                { member: { id: memberId } }, // ⭐ PK 사용
+                { member: { id: memberId } },
                 { withCredentials: true }
             );
 
-            const status = res.data;
+            const status = res.data; // "liked" | "unliked" | true/false
 
-            setLikedBooks((prev) =>
-                prev.map((b) =>
-                    b.book.bookId === bookId
-                        ? { ...b, liked: status === "liked" }
-                        : b
-                )
-            );
-
-            loadLikedBooks();
+            // ✅ 마이페이지에서는 "좋아요 취소"면 목록에서 제거
+            if (status === "unliked" || status === false) {
+                setLikedBooks((prev) =>
+                    prev.filter((book) => book.bookId !== bookId)
+                );
+            }
         } catch (err) {
             console.error("좋아요 토글 실패:", err);
         }
     };
-    
+
 
     // =====================================================
     // 📌 UI
@@ -227,7 +224,7 @@ export default function MyPage() {
                 <div style={styles.bookGrid}>
                     {likedBooks.map((book) => (
                         <div
-                            key={book.book_id}
+                            key={book.bookId}
                             style={styles.card}
                             onClick={() => handleGoDetail(book)}
                         >
@@ -253,7 +250,7 @@ export default function MyPage() {
                                     style={styles.likeIconBox}
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        toggleLike(book.book_id);
+                                        toggleLike(book.bookId);
                                     }}
                                 >
                                     <img
