@@ -421,4 +421,4 @@ const styles = {
         overflow: "hidden",
         textOverflow: "ellipsis",
     },
-};
+};/* 수정 */
