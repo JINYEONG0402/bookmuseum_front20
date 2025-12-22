@@ -3,7 +3,7 @@ os: linux
 
 files:
   - source: dist
-    destination: /var/www/bookmuseum-front
+    destination: /var/www/react-app
 
 hooks:
   AfterInstall:
