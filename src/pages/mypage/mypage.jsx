@@ -148,7 +148,7 @@ export default function MyPage() {
 
             <div style={styles.registerRow}>
                 <button style={styles.registerBtn} onClick={goToRegister}>
-                    + 도서 등록하기
+                    + 도서 등록하기!
                 </button>
             </div>
 
