@@ -1,0 +1,22 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - npm ci
+
+  build:
+    commands:
+      - npm run build
+      # CodeDeploy로 넘길 번들 만들기
+      - mkdir -p bundle
+      - cp -r dist bundle/dist
+      - cp appspec.yml bundle/appspec.yml
+      - cp -r scripts bundle/scripts
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: bundle
