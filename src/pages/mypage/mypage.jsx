@@ -154,7 +154,7 @@ export default function MyPage() {
 
             {/* 내가 등록한 도서 */}
             <section style={styles.section}>
-                <h3 style={styles.subTitle}>등록한 도서</h3>
+                <h3 style={styles.subTitle}>등록한 도서!!</h3>
 
                 <div style={styles.bookGrid}>
                     {myBooks.length === 0 && (
