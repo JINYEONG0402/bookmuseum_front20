@@ -13,7 +13,7 @@ import MyPage from "./pages/mypage/mypage.jsx";
 
 import Header from "./components/layout/Header.jsx";
 
-const API_BASE_URL = "http://18.138.248.193:8080";
+//const API_BASE_URL = "http://18.138.248.193:8080";
 
 function App() {
     // 🔥 로그인 여부 (로컬스토리지 기반)

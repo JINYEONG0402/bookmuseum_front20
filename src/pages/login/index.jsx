@@ -5,7 +5,7 @@ import "./login.css";
 
 function Login({ setIsLoggedIn }) {
     const navigate = useNavigate();
-    const API_BASE = "http://18.138.248.193:8080";
+    //const API_BASE = "http://18.138.248.193:8080";
 
     const [showPassword, setShowPassword] = useState(false);
     const [id, setId] = useState("");
@@ -18,11 +18,13 @@ function Login({ setIsLoggedIn }) {
         const payload = { loginId: id, pass: pw };
 
         try {
-            const res = await fetch(`${API_BASE}/api/member/login`, {
+            const res = await fetch(`/api/member/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
+                credentials: "include", // ✅ 세션/JWT 쿠키 쓰면 필수
                 body: JSON.stringify(payload),
             });
+
 
             const data = await res.json();
 

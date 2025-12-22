@@ -14,7 +14,7 @@ import {
     CircularProgress,
 } from "@mui/material";
 
-const API_BASE_URL = "http://18.138.248.193:8080"; // 스프링 서버 주소
+//const API_BASE_URL = "http://18.138.248.193:8080"; // 스프링 서버 주소
 
 function AiImagePage() {
     const location = useLocation();
@@ -162,41 +162,23 @@ function AiImagePage() {
         // 🟢 수정 모드일 때: 서버에 표지 URL 반영
         if (mode === "edit" && bookId) {
             try {
-                const res = await fetch(
-                    `${API_BASE_URL}/api/books/${bookId}/cover-url`,
-                    {
-                        method: "PUT",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        credentials: "include", // 세션 기반이면 주석 해제
-                        body: JSON.stringify({
-                            imgUrl: image.imgUrl, // CoverImageRequest의 필드명과 일치
-                        }),
-                    }
-                );
+                const res = await fetch(`/api/books/${bookId}/cover-url`, {
+                          method: "PUT",
+                          headers: { "Content-Type": "application/json" },
+                          credentials: "include",
+                          body: JSON.stringify({ imgUrl: image.imgUrl }),
+                        });
 
-                if (!res.ok) {
-                    console.warn(
-                        "표지 이미지 URL 업데이트 실패, 상태코드:",
-                        res.status
-                    );
-                } else {
-                    const updatedBook = await res
-                        .json()
-                        .catch(() => null);
-                    console.log(
-                        "서버에 표지 이미지 URL 반영 완료:",
-                        updatedBook
-                    );
-                }
-            } catch (err) {
-                console.warn(
-                    "표지 이미지 URL 업데이트 API 호출 실패:",
-                    err
-                );
-            }
-        }
+                        if (!res.ok) {
+                          console.warn("표지 이미지 URL 업데이트 실패, 상태코드:", res.status);
+                        } else {
+                          const updatedBook = await res.json().catch(() => null);
+                          console.log("서버에 표지 이미지 URL 반영 완료:", updatedBook);
+                        }
+                      } catch (err) {
+                        console.warn("표지 이미지 URL 업데이트 API 호출 실패:", err);
+                      }
+                    }
 
         // 🟣 화면 이동
         if (mode === "edit") {

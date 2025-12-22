@@ -4,7 +4,7 @@ import "./join.css";
 
 function Join() {
     const navigate = useNavigate();
-    const API_BASE = "http://18.138.248.193:8080";
+    //const API_BASE = "http://18.138.248.193:8080";
 
     const [id, setId] = useState("");
     const [pw, setPw] = useState("");
@@ -25,7 +25,7 @@ function Join() {
         }
 
         try {
-            const res = await fetch(`${API_BASE}/api/member/check/${id}`, {
+            const res = await fetch(`/api/member/check/${id}`, {
                 method: "POST",
                 });
 

@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 
 // 🔗 백엔드 서버 주소 (BookCreatePage랑 맞게 사용)
-const API_BASE = "http://18.138.248.193:8080";
+const API_BASE = "";
 
 // 날짜를 "YYYY-MM-DD"로 만드는 유틸 함수
 function formatDateToYMD(date = new Date()) {
@@ -62,9 +62,9 @@ function BookUpdatePage({ bookList, setBookList }) {
 
         (async () => {
             try {
-                const res = await fetch(`${API_BASE}/api/books/${id}`, {
-                    method: "GET",
-                    credentials: "include",
+                const res = await fetch(`/api/books/${id}`, {  // ✅
+                  method: "GET",
+                  credentials: "include",
                 });
 
                 if (!res.ok) {
@@ -128,13 +128,11 @@ function BookUpdatePage({ bookList, setBookList }) {
         const updateDate = formatDateToYMD();
 
         try {
-            const res = await fetch(`${API_BASE_URL}/api/books/${id}`, {
-                method: "PUT",               // 🔥 수정이니까 PUT
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",      // 🔥 JWT 쿠키 같이 보내기
-                body: JSON.stringify(apiPayload),
+            const res = await fetch(`/api/books/${id}`, {  // ✅
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify(apiPayload),
             });
 
             if (res.ok) {

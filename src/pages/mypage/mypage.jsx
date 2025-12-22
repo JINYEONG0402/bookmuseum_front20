@@ -16,14 +16,14 @@ export default function MyPage() {
     const [likedBooks, setLikedBooks] = useState([]);
 
     // 🔹 API 기본 주소
-    const API_BASE = "http://localhost:8080";
+    const API_BASE = "";
 
     // =====================================================
     // 📌 내가 등록한 도서 조회 API
     // =====================================================
     const loadMyBooks = async () => {
         try {
-            const res = await axios.get(`${API_BASE}/api/mypage`, {
+            const res = await axios.get(`/api/mypage`, {
                 params: { memberId },
                 withCredentials: true,
             });
@@ -41,7 +41,7 @@ export default function MyPage() {
     // =====================================================
     const loadLikedBooks = async () => {
         try {
-            const res = await axios.get(`${API_BASE}/api/mypage/liked`, {
+            const res = await axios.get(`/api/mypage/liked`, {
                 params: { memberId },
                 withCredentials: true,
             });
@@ -59,7 +59,7 @@ export default function MyPage() {
         if (!window.confirm("정말 삭제하시겠습니까?")) return;
 
         try {
-            await axios.delete(`${API_BASE}/api/mypage/${book.bookId}`, {
+            await axios.delete(`/api/mypage/${book.bookId}`, {
                 data: { bookId: book.bookId },
                 withCredentials: true,
             });
@@ -126,9 +126,9 @@ export default function MyPage() {
     const toggleLike = async (bookId) => {
         try {
             const res = await axios.patch(
-                `${API_BASE}/api/books/${bookId}`,
-                { member: { id: memberId } },
-                { withCredentials: true }
+              `/api/books/${bookId}`,
+              { member: { id: memberId } },
+              { withCredentials: true }
             );
 
             const status = res.data; // "liked" | "unliked" | true/false

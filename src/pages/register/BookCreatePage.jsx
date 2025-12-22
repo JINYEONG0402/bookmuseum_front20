@@ -12,7 +12,7 @@ import {
     CardMedia,
 } from "@mui/material";
 
-const API_BASE = "http://18.138.248.193:8080"; // 스프링 서버 주소 (포트 맞게 조정)
+const API_BASE = ""; // 스프링 서버 주소 (포트 맞게 조정)
 
 function formatDateToYMD(date = new Date()) {
     const year = date.getFullYear();
@@ -108,7 +108,7 @@ function BookCreatePage({ setBookList }) {
         let savedBookFromServer = null;
 
         try {
-            const res = await fetch(`${API_BASE}/api/books`, {
+            const res = await fetch(`/api/books`, {   // ✅ Nginx가 /api를 ALB로 프록시해줌
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
