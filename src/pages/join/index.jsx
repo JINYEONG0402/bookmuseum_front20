@@ -75,7 +75,7 @@ function Join() {
         };
 
         try {
-            const res = await fetch(`${API_BASE}/api/member`, {
+            const res = await fetch(`/api/member`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
