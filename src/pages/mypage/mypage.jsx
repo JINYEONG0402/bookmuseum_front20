@@ -22,34 +22,24 @@ export default function MyPage() {
     // 📌 내가 등록한 도서 조회 API
     // =====================================================
     const loadMyBooks = async () => {
-        try {
-            const res = await axios.get(`/api/mypage`, {
-                params: { memberId },
-                withCredentials: true,
-            });
-
-            console.log("📌 [내 도서 응답]", res.data);
-
-            setMyBooks(res.data);
-        } catch (err) {
-            console.error("내 도서 조회 오류:", err);
-        }
+      try {
+        const res = await axios.get(`/api/mypage`, { withCredentials: true });
+        setMyBooks(res.data);
+      } catch (err) {
+        console.error("내 도서 조회 오류:", err);
+      }
     };
 
     // =====================================================
     // 📌 좋아요한 도서 조회 API
     // =====================================================
     const loadLikedBooks = async () => {
-        try {
-            const res = await axios.get(`/api/mypage/liked`, {
-                params: { memberId },
-                withCredentials: true,
-            });
-
-            setLikedBooks(res.data);
-        } catch (err) {
-            console.error("좋아요 도서 조회 오류:", err);
-        }
+      try {
+        const res = await axios.get(`/api/mypage/liked`, { withCredentials: true });
+        setLikedBooks(res.data);
+      } catch (err) {
+        console.error("좋아요 도서 조회 오류:", err);
+      }
     };
 
     // =====================================================
@@ -124,24 +114,28 @@ export default function MyPage() {
     // 📌 좋아요 토글 API
     // =====================================================
     const toggleLike = async (bookId) => {
-        try {
-            const res = await axios.patch(
-              `/api/books/${bookId}`,
-              { member: { id: memberId } },
-              { withCredentials: true }
-            );
+      try {
+        const res = await axios.post(
+          `/api/books/${bookId}/like`,
+          {},
+          { withCredentials: true }
+        );
 
-            const status = res.data; // "liked" | "unliked" | true/false
+        // 서버가 "liked"/"unliked" 또는 true/false를 준다고 가정
+        const status = res.data;
 
-            // ✅ 마이페이지에서는 "좋아요 취소"면 목록에서 제거
-            if (status === "unliked" || status === false) {
-                setLikedBooks((prev) =>
-                    prev.filter((book) => book.bookId !== bookId)
-                );
-            }
-        } catch (err) {
-            console.error("좋아요 토글 실패:", err);
+        // 1) likedBooks 목록에서는 "취소"면 제거
+        if (status === "unliked" || status === false) {
+          setLikedBooks((prev) => prev.filter((b) => b.bookId !== bookId));
+        } else {
+          // 2) 성공이면 liked=true로 갱신 (혹시 목록에 남겨두고 싶다면)
+          setLikedBooks((prev) =>
+            prev.map((b) => (b.bookId === bookId ? { ...b, liked: true } : b))
+          );
         }
+      } catch (err) {
+        console.error("좋아요 토글 실패:", err);
+      }
     };
 
 
