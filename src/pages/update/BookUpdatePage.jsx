@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 
 // 🔗 백엔드 서버 주소 (BookCreatePage랑 맞게 사용)
-const API_BASE_URL = "http://localhost:8080";
+const API_BASE = "http://18.138.248.193:8080";
 
 // 날짜를 "YYYY-MM-DD"로 만드는 유틸 함수
 function formatDateToYMD(date = new Date()) {
@@ -62,7 +62,7 @@ function BookUpdatePage({ bookList, setBookList }) {
 
         (async () => {
             try {
-                const res = await fetch(`${API_BASE_URL}/api/books/${id}`, {
+                const res = await fetch(`${API_BASE}/api/books/${id}`, {
                     method: "GET",
                     credentials: "include",
                 });

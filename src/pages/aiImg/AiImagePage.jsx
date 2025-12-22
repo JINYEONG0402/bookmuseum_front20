@@ -14,7 +14,7 @@ import {
     CircularProgress,
 } from "@mui/material";
 
-const API_BASE_URL = "http://localhost:8080"; // 스프링 서버 주소
+const API_BASE_URL = "http://18.138.248.193:8080"; // 스프링 서버 주소
 
 function AiImagePage() {
     const location = useLocation();
@@ -169,7 +169,7 @@ function AiImagePage() {
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        // credentials: "include", // 세션 기반이면 주석 해제
+                        credentials: "include", // 세션 기반이면 주석 해제
                         body: JSON.stringify({
                             imgUrl: image.imgUrl, // CoverImageRequest의 필드명과 일치
                         }),

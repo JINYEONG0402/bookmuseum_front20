@@ -5,7 +5,7 @@ import axios from "axios";
 export default function Header({ isLoggedIn, setIsLoggedIn }) {
     const navigate = useNavigate();
 
-    const API_BASE = "http://localhost:8080";
+    const API_BASE = "http://18.138.248.193:8080";
 
     const handleLogout = async () => {
         try {
