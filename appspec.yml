@@ -6,6 +6,11 @@ files:
     destination: /var/www/react-app
 
 hooks:
+  BeforeInstall:
+    - location: scripts/cleanup.sh
+      timeout: 60
+      runas: root
+
   AfterInstall:
     - location: scripts/restart_nginx.sh
       timeout: 60
